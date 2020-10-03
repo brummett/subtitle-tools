@@ -11,9 +11,15 @@ token section {
 
 token section-name { <-[\]]>+ }
 
-token section-line {
+proto token section-line { * }
+token section-line:sym<comment> {
+    <comment-token> <value=string-to-end-of-line> \n
+}
+token section-line:sym<key-value> {
     <key> \s* ':' \s* <value=string-to-end-of-line> \n
 }
+
+token comment-token { [ ';' | '!:' ] }
 
 token key { <-[:\n]>+ }
 token string-to-end-of-line { \V+ }

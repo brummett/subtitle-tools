@@ -9,10 +9,12 @@ subtest 'basic parse', sub {
 
     my $subs = q:to/END/;
         [Script Info]
+        ; A comment
         Title: Foo
         Thing With Spaces: Bar
 
         [Section 2]
+        !: another comment
         Baz: Quux
         END
 
@@ -20,8 +22,8 @@ subtest 'basic parse', sub {
     ok $subtitles, 'Parsed';
 
     is $subtitles.sections.elems, 2, '2 sections';
-    is $subtitles.sections[0].lines.elems, 2, 'First section has 2 lines';
-    is $subtitles.sections[1].lines.elems, 1, 'Second section has 1 line';
+    is $subtitles.sections[0].lines.elems, 3, 'First section line count';
+    is $subtitles.sections[1].lines.elems, 2, 'Second section line count';
 };
 
 

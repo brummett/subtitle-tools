@@ -18,9 +18,14 @@ method section($/) {
     make Subtitle::SubStationAlphaV4Plus::Section.new(:$name, :@lines);
 }
 
-method section-line($/) {
+method section-line:sym<comment>($/) {
+    my $value = $<value>.Str;
+    make Subtitle::SubStationAlphaV4Plus::Comment.new(:$value);
+}
+
+method section-line:sym<key-value>($/) {
     my $key = $<key>.Str;
     my $value = $<value>.Str;
-    make Subtitle::SubStationAlphaV4Plus::SectionLine.new(:$key, :$value);
+    make Subtitle::SubStationAlphaV4Plus::KeyValue.new(:$key, :$value);
 }
 

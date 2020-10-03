@@ -1,5 +1,11 @@
-unit class Subtitle::SubStationAlphaV4Plus::SectionLine;
+role Subtitle::SubStationAlphaV4Plus::SectionLine {
+    has Str $.value;
+}
 
-has Str $.key;
-has Str $.value;
+class Subtitle::SubStationAlphaV4Plus::Comment does Subtitle::SubStationAlphaV4Plus::SectionLine { }
+
+class Subtitle::SubStationAlphaV4Plus::KeyValue does Subtitle::SubStationAlphaV4Plus::SectionLine
+{
+    has Str $.key;
+}
 
