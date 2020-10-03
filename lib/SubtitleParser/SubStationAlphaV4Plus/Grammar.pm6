@@ -13,7 +13,7 @@ token section-name { <-[\]]>+ }
 
 proto token section-line { * }
 token section-line:sym<comment> {
-    <comment-token> <value=string-to-end-of-line> \n
+    <comment-token> \s* <value=string-to-end-of-line> \n
 }
 token section-line:sym<key-value> {
     <key> \s* ':' \s* <value=string-to-end-of-line> \n
