@@ -4,7 +4,8 @@ rule TOP {
     <section>+ %% \n
 }
 
-token section {
+proto token section { * }
+token section:sym<generic> {
     '[' <section-name> ']' \n
     <section-line>+
 }

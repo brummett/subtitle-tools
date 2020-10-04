@@ -10,7 +10,7 @@ method TOP($/) {
     make Subtitle::SubStationAlphaV4Plus.new(:@sections);
 }
 
-method section($/) {
+method section:sym<generic>($/) {
     my $name = $<section-name>.Str;
     my @lines = @<section-line>>>.made;
 
