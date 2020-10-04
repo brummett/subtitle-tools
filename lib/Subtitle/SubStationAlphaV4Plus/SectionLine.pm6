@@ -25,3 +25,25 @@ class Subtitle::SubStationAlphaV4Plus::Format
 {
     has $.key = 'Format';
 }
+
+class Subtitle::SubStationAlphaV4Plus::HashValue
+    is Subtitle::SubStationAlphaV4Plus::Multivalue
+{
+    has @.fields;
+    has %!fields;
+    submethod BUILD(:@!fields) {
+        for @!fields.kv -> $i, $name {
+            %!fields{$name} = $i;
+        }
+    }
+
+    method get(Str $field --> Str) {
+        @.values[ %!fields{$field} ];
+    }
+}
+
+class Subtitle::SubStationAlphaV4Plus::Style
+    is Subtitle::SubStationAlphaV4Plus::HashValue
+{
+    has $.key = 'Style';
+}

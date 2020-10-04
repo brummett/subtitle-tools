@@ -2,7 +2,7 @@ use Subtitle::SubStationAlphaV4Plus::SectionLine;
 
 use Test;
 
-plan 3;
+plan 4;
 
 subtest 'KeyValue' => sub {
     plan 2;
@@ -36,4 +36,20 @@ subtest 'Format' => sub {
     is $format.Str, "Format: one, two, three\n", 'stringify';
     is $format.values, ['one', 'two', 'three'], 'values';
     is $format.value, 'one, two, three', 'value';
+}
+
+subtest 'Style' => sub {
+    plan 8;
+
+    my $style = Subtitle::SubStationAlphaV4Plus::Style.new(
+                    fields => ['first', 'second', 'third'],
+                    values => [ 'one', 'two', 'three' ]);
+    ok $style, 'create';
+    is $style.Str, "Style: one, two, three\n", 'stringify';
+    is $style.values, ['one', 'two', 'three'], 'values';
+    is $style.value, 'one, two, three', 'value';
+    is $style.fields, ['first', 'second', 'third'], 'fields';
+    is $style.get('first'), 'one', 'get first field';
+    is $style.get('second'), 'two', 'get second field';
+    is $style.get('third'), 'three', 'get third field';
 }
