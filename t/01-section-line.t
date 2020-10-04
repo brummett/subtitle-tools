@@ -2,7 +2,7 @@ use Subtitle::SubStationAlphaV4Plus::SectionLine;
 
 use Test;
 
-plan 2;
+plan 3;
 
 subtest 'KeyValue' => sub {
     plan 2;
@@ -26,4 +26,14 @@ subtest 'Comment' => sub {
     throws-like {
         my $broken = Subtitle::SubStationAlphaV4Plus::Comment.new(key => 'Notallowed', value => 'foo');
     }, X::TypeCheck::Assignment, 'restrict keys';
+}
+
+subtest 'Format' => sub {
+    plan 4;
+
+    my $format = Subtitle::SubStationAlphaV4Plus::Format.new(values => [ 'one', 'two', 'three' ]);
+    ok $format, 'create';
+    is $format.Str, "Format: one, two, three\n", 'stringify';
+    is $format.values, ['one', 'two', 'three'], 'values';
+    is $format.value, 'one, two, three', 'value';
 }

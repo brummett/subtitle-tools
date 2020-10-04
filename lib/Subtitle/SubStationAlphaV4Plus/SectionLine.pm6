@@ -1,6 +1,6 @@
 class Subtitle::SubStationAlphaV4Plus::KeyValue {
-    has Str $.key is required;
-    has Str $.value is required;
+    has Str $.key;
+    has Str $.value;
 
     method Str { "$!key: $!value\n" }
 }
@@ -12,3 +12,16 @@ class Subtitle::SubStationAlphaV4Plus::Comment
     method Str { "$!key $.value\n" }
 }
 
+class Subtitle::SubStationAlphaV4Plus::Multivalue
+    is Subtitle::SubStationAlphaV4Plus::KeyValue
+{
+    has Str @.values;
+    method value { @!values.join(', ') }
+    method Str { "$.key: { self.value }\n" }
+}
+
+class Subtitle::SubStationAlphaV4Plus::Format
+    is Subtitle::SubStationAlphaV4Plus::Multivalue
+{
+    has $.key = 'Format';
+}
