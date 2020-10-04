@@ -1,20 +1,14 @@
-role Subtitle::SubStationAlphaV4Plus::SectionLine {
-    has Str $.value;
+class Subtitle::SubStationAlphaV4Plus::KeyValue {
+    has Str $.key is required;
+    has Str $.value is required;
 
-    method Str { ... }
+    method Str { "$!key: $!value" }
 }
 
-class Subtitle::SubStationAlphaV4Plus::Comment does Subtitle::SubStationAlphaV4Plus::SectionLine
+class Subtitle::SubStationAlphaV4Plus::Comment
+    is Subtitle::SubStationAlphaV4Plus::KeyValue
 {
-    has Str $.marker = ';';
-
-    method Str { "$.marker $.value" }
-}
-
-class Subtitle::SubStationAlphaV4Plus::KeyValue does Subtitle::SubStationAlphaV4Plus::SectionLine
-{
-    has Str $.key;
-
-    method Str { "$.key: $.value" }
+    has Str $.key is required where * eq any(';', '!:');
+    method Str { "$!key $.value" }
 }
 

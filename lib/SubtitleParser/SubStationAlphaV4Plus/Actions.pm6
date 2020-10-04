@@ -19,9 +19,9 @@ method section:sym<generic>($/) {
 }
 
 method section-line:sym<comment>($/) {
-    my $marker = $<comment-token>.Str;
+    my $key = $<comment-token>.Str;
     my $value = $<value>.Str;
-    make Subtitle::SubStationAlphaV4Plus::Comment.new(:$marker, :$value);
+    make Subtitle::SubStationAlphaV4Plus::Comment.new(:$key, :$value);
 }
 
 method section-line:sym<key-value>($/) {
