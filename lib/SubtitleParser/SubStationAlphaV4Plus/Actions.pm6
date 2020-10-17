@@ -10,18 +10,33 @@ method TOP($/) {
     make Subtitle::SubStationAlphaV4Plus.new(:@sections);
 }
 
-method section($/) {
+
+method section:sym<style>($/) {
+    my $format = $<format>.made;
+    my @styles = @<style>>>.made;
+    make Subtitle::SubStationAlphaV4Plus::Section.new(name => 'V4+ Styles', lines => ($format, |@styles));
+}
+
+method section:sym<generic>($/) {
     my $name = $<section-name>.Str;
     my @lines = @<section-line>>>.made;
-
 
     make Subtitle::SubStationAlphaV4Plus::Section.new(:$name, :@lines);
 }
 
+method format($/) {
+    my @fields = @<field>>>.Str;
+    make Subtitle::SubStationAlphaV4Plus::Format.new(name => 'Format', values => @fields);
+}
+
+method style($/) {
+    make Subtitle::SubStationAlphaV4Plus::Style.new(fields => @*fields, values => @<field>>>.Str);
+}
+
 method section-line:sym<comment>($/) {
-    my $marker = $<comment-token>.Str;
+    my $key = $<comment-token>.Str;
     my $value = $<value>.Str;
-    make Subtitle::SubStationAlphaV4Plus::Comment.new(:$marker, :$value);
+    make Subtitle::SubStationAlphaV4Plus::Comment.new(:$key, :$value);
 }
 
 method section-line:sym<key-value>($/) {
