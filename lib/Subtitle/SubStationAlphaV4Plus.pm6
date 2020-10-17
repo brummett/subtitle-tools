@@ -20,3 +20,7 @@ method styles {
 method style(Str $name) {
     self.styles.grep({ $_.get('Name') eq $name })[0];
 }
+
+method events {
+    self.section('Events').lines.grep({ $_~~ Subtitle::SubStationAlphaV4Plus::Event });
+}

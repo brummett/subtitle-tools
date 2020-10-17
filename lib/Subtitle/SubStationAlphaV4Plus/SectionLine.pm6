@@ -48,3 +48,7 @@ class Subtitle::SubStationAlphaV4Plus::Style
 {
     has $.key = 'Style';
 }
+
+class Subtitle::SubStationAlphaV4Plus::Event
+    is Subtitle::SubStationAlphaV4Plus::HashValue
+{ }
