@@ -38,7 +38,8 @@ class Subtitle::SubStationAlphaV4Plus::HashValue
     }
 
     method get(Str $field --> Str) {
-        @.values[ %!fields{$field} ];
+        my $idx = %!fields{$field};
+        defined($idx) ?? @.values[ %!fields{$field} ] !! Nil;
     }
 }
 

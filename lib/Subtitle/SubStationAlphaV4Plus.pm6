@@ -12,3 +12,11 @@ method section(Str $name) {
     }
     fail "No section with name $name";
 }
+
+method styles {
+    self.section('V4+ Styles').lines.grep({ $_ ~~ Subtitle::SubStationAlphaV4Plus::Style });
+}
+
+method style(Str $name) {
+    self.styles.grep({ $_.get('Name') eq $name })[0];
+}

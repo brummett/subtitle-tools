@@ -2,7 +2,7 @@ use SubtitleParser;
 
 use Test;
 
-plan 2;
+plan 3;
 
 subtest 'basic parse', sub {
     plan 8;
@@ -62,3 +62,23 @@ subtest 'Duplicate section names' => sub {
                     "Duplicate section $section-name";
     }
 };
+
+subtest 'styles' => sub {
+    plan 3;
+
+    my $subs = q:to/END/;
+        [Script Info]
+        Title: foo
+
+        [V4+ Styles]
+        Format: Name, Fontname, Fontsize, PrimaryColour, Bold, Angle
+        Style: BoldStyle, BoldFont, 100, BoldColor, 1, 90
+        Style: Default, DefaultFont, 10, DefaultColor, 0, 180
+
+        END
+
+    my $subtitles = SubtitleParser.parse_ssa($subs);
+    ok $subtitles, 'Parsed';
+    is $subtitles.styles.elems, 2, 'Number of styles';
+    is $subtitles.section('V4+ Styles').lines.elems, 3, 'Number of lines in style section';
+}
