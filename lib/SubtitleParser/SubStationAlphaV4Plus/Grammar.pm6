@@ -44,7 +44,8 @@ token style {
 
 token event {
     <event-type> ': '
-    <field>+ % <comma-separator>
+    <field> ** { @*fields.elems - 1} % <comma-separator>
+        <comma-separator> <final-field=string-to-end-of-line>
 }
 
 token event-type {
@@ -67,6 +68,6 @@ token comment-token { [ ';' | '!:' ] }
 token key { <-[:\n]>+ }
 token string-to-end-of-line { \V+ }
 
-token field { <-[,\n]>+ }
+token field { <-[,\n]>* }
 
 token comma-separator { \s* ',' \s* }

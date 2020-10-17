@@ -2,8 +2,6 @@ use SubtitleParser;
 
 use Test;
 
-plan 5;
-
 my $subs = q:to/END/;
     [Script Info]
     Title: foo
@@ -11,12 +9,12 @@ my $subs = q:to/END/;
     [Events]
     Format: Layer, Name, Text
     Comment: 0, Bob, Hello there
-    Dialogue: 10, Joe, Nice to meet you
+    Dialogue: 10, Joe, Nice to meet you, too
+    Dialogue: 10, , {\i1}Still{\i0}, there is more\Nto see
     END
 
 my $subtitles = SubtitleParser.parse_ssa($subs);
 ok $subtitles, 'Parsed';
-is $subtitles.events.elems, 2, 'Number of events';
 
 my @expected-events =
                 Comment => {Layer => 0,
@@ -26,10 +24,15 @@ my @expected-events =
                           },
                 Dialogue =>{Layer => 10,
                             Name  => 'Joe',
-                            Text  => 'Nice to meet you',
+                            Text  => 'Nice to meet you, too',
                             Bar   => Nil,
                           },
+                Dialogue =>{Layer => 10,
+                            Name  => '',
+                            Text  => '{\i1}Still{\i0}, there is more\Nto see',
+                          },
                 ;
+is $subtitles.events.elems, @expected-events.elems, 'Number of events';
 
 for @expected-events.kv -> $i, (:key($type), :value($attribs)) {
     subtest "event $i" => sub {
@@ -43,3 +46,5 @@ for @expected-events.kv -> $i, (:key($type), :value($attribs)) {
 }
 
 is $subtitles.Str, $subs, 'Regenerate original';
+
+done-testing;

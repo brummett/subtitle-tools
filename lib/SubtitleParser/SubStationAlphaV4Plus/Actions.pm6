@@ -41,7 +41,8 @@ method style($/) {
 
 method event($/) {
     my $type = $<event-type>.Str;
-    make Subtitle::SubStationAlphaV4Plus::Event.new(key => $type, fields => @*fields, values => @<field>>>.Str);
+    my @fields = @<field>>>.Str;
+    make Subtitle::SubStationAlphaV4Plus::Event.new(key => $type, fields => @*fields, values => (|@fields, $<final-field>.Str))
 }
 
 method section-line:sym<comment>($/) {
