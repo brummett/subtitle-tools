@@ -2,7 +2,7 @@ use SubtitleParser;
 
 use Test;
 
-plan 5;
+plan 6;
 
 subtest 'basic parse', sub {
     plan 8;
@@ -144,4 +144,31 @@ subtest 'empty lines' => sub {
         is $subtitles.section($section-name).lines.elems, $expected-lines, "Expected lines for $section-name";
     }
     done-testing;
+};
+
+subtest 'enforce field cound' => sub {
+    my @subs = qq:to/StyleTooManyFields/,
+                    [V4+ Styles]
+                    Format: One, Two, Three
+                    Style: One, Two, Three, Four
+                    StyleTooManyFields
+                qq:to/StyleTooFewFields/,
+                    [V4+ Styles]
+                    Format: One, Two, Three
+                    Style: One, Two
+                    StyleTooFewFields
+                qq:to/EventTooFewFields/,
+                    [Events]
+                    Format: One, Two, Three
+                    Dialogue: One, Two
+                    Comment: Fee, Foe, Fie
+                    EventTooFewFields
+            ;
+    plan @subs.elems;
+    for @subs.kv -> $i, $sub {
+        throws-like { SubtitleParser.parse_ssa($sub) },
+                    Exception,
+                    :message(/'Expected ' \d ' fields but got ' \d ' at'/),
+                    "Wrong number of fields $i";
+    }
 };

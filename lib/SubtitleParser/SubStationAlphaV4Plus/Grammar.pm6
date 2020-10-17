@@ -40,12 +40,18 @@ token format {
 token style {
     'Style: '
     <field>+ % <comma-separator>
+    { fail "Expected { @*fields.elems } fields but got { @<field>.elems } at ｢$/｣"
+        unless @*fields.elems == @<field>.elems }
 }
 
 token event {
     <event-type> ': '
-    <field> ** { @*fields.elems - 1} % <comma-separator>
-        <comma-separator> <final-field=string-to-end-of-line>
+    <field> ** { 0 .. (@*fields.elems - 1) } % <comma-separator>
+    { fail "Expected { @*fields.elems } fields but got { @<field>.elems } at ｢$/｣"
+        unless @<field>.elems == @*fields.elems - 1 }
+    [ <comma-separator> <final-field=string-to-end-of-line> ]*
+    { fail "Expected { @*fields.elems } fields but got { @<field>.elems } at ｢$/｣"
+        unless $<comma-separator> and $<final-field> }
 }
 
 token event-type {
