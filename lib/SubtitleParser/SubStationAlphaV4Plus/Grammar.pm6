@@ -16,6 +16,15 @@ token section:sym<style> {
     :my @*fields = $<format>.made.values;
     <style>+ % \n+
 }
+token section:sym<event> {
+    '[Events]' \n
+    { fail "Duplicate section: Events" if %*section-names{'Events'}:exists }
+    { %*section-names{'Events'} = True }
+    <format> \n+
+    {} # necessary to get $<format> filled in
+    :my @*fields = $<format>.made.values;
+    <event>+ % \n+
+}
 token section:sym<generic> {
     '[' <section-name> ']' \n
     { fail "Duplicate section: $<section-name>" if %*section-names{$<section-name>}:exists }
@@ -31,6 +40,16 @@ token format {
 token style {
     'Style: '
     <field>+ % <comma-separator>
+}
+
+token event {
+    <event-type> ': '
+    <field>+ % <comma-separator>
+}
+
+token event-type {
+       'Comment'
+    || 'Dialogue'
 }
 
 token section-name { <-[\]]>+ }

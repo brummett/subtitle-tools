@@ -2,7 +2,7 @@ use SubtitleParser;
 
 use Test;
 
-plan 4;
+plan 5;
 
 subtest 'basic parse', sub {
     plan 8;
@@ -83,6 +83,25 @@ subtest 'styles' => sub {
     is $subtitles.section('V4+ Styles').lines.elems, 3, 'Number of lines in style section';
 }
 
+subtest 'events' => sub {
+    plan 3;
+
+    my $subs = q:to/END/;
+        [Script Info]
+        Title: foo
+
+        [Events]
+        Format: Layer, Start, End, Name, Text
+        Comment: 0, 0:01:02,1:04:05, Bob, Hi There
+        Dialogue: 10,0:03:03, 5:02:99, Joe, Hello World
+        END
+
+    my $subtitles = SubtitleParser.parse_ssa($subs);
+    ok $subtitles, 'Parsed';
+    is $subtitles.events.elems, 2, 'Number of events';
+    is $subtitles.section('Events').lines.elems, 3, 'Number of lines in the Events section';
+};
+
 subtest 'empty lines' => sub {
     my $subs = q:to/END/;
         [Script Info]
@@ -103,6 +122,13 @@ subtest 'empty lines' => sub {
 
         Line4: 4
 
+        [Events]
+        Format: Layer, Name, Text
+
+        Comment: 0, Bob, Hi there
+
+        Dialogue: 1, Joe, Hello World
+
         END
     my $subtitles = SubtitleParser.parse_ssa($subs);
     ok $subtitles, 'Parsed';
@@ -110,6 +136,7 @@ subtest 'empty lines' => sub {
     my %expected-lines = 'Script Info' => 2,
                          'V4+ Styles'  => 3,
                          'Section 2'   => 2,
+                         'Events'      => 3,
                         ;
 
     is $subtitles.sections.elems, %expected-lines.keys.elems, 'Expected number of sections';

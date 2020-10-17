@@ -17,6 +17,12 @@ method section:sym<style>($/) {
     make Subtitle::SubStationAlphaV4Plus::Section.new(name => 'V4+ Styles', lines => ($format, |@styles));
 }
 
+method section:sym<event>($/) {
+    my $format = $<format>.made;
+    my @events = @<event>>>.made;
+    make Subtitle::SubStationAlphaV4Plus::Section.new(name => 'Events', lines => ($format, |@events));
+}
+
 method section:sym<generic>($/) {
     my $name = $<section-name>.Str;
     my @lines = @<section-line>>>.made;
@@ -31,6 +37,11 @@ method format($/) {
 
 method style($/) {
     make Subtitle::SubStationAlphaV4Plus::Style.new(fields => @*fields, values => @<field>>>.Str);
+}
+
+method event($/) {
+    my $type = $<event-type>.Str;
+    make Subtitle::SubStationAlphaV4Plus::Event.new(key => $type, fields => @*fields, values => @<field>>>.Str);
 }
 
 method section-line:sym<comment>($/) {
