@@ -2,7 +2,7 @@ use SubtitleParser;
 
 use Test;
 
-plan 1;
+plan 2;
 
 subtest 'basic parse', sub {
     plan 8;
@@ -32,4 +32,33 @@ subtest 'basic parse', sub {
     is $subtitles.Str, $subs, 'regenerate original';
 };
 
+subtest 'Duplicate section names' => sub {
+    my %dups = 'Script Info' => q:to/DupScriptInfo/,
+                    [Script Info]
+                    Title: foo
 
+                    [Section 2]
+                    Foo: bar
+
+                    [Script Info]
+                    Baz: quux
+                    DupScriptInfo
+                'Section 2' => q:to/DupGenericSection/,
+                    [Script Info]
+                    Title: foo
+
+                    [Section 2]
+                    Foo: bar
+
+                    [Section 2]
+                    Baz: quux
+                    DupGenericSection
+                ;
+    plan %dups.values.elems;
+    for %dups.kv -> $section-name, $subs {
+        throws-like { SubtitleParser.parse_ssa($subs) },
+                    Exception,
+                    :message("Duplicate section: $section-name"),
+                    "Duplicate section $section-name";
+    }
+};

@@ -1,12 +1,15 @@
 unit grammar SubtitleParser::SubStationAlphaV4Plus::Grammar;
 
 rule TOP {
+    :my Bool %*section-names;
     <section>+ %% \n
 }
 
 proto token section { * }
 token section:sym<generic> {
     '[' <section-name> ']' \n
+    { fail "Duplicate section: $<section-name>" if %*section-names{$<section-name>}:exists }
+    { %*section-names{$<section-name>} = True }
     <section-line>+
 }
 
