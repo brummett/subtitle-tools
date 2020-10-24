@@ -33,6 +33,7 @@ method expression:sym<infix-operator>($/) {
     make $op_class.new(:$left, :$right);
 }
 
+method expression:sym<not>($/) { make Subtitle::Filter::Operator::Not.new(expr => $<complex-expression>.made) }
 method expression:sym<recurse>($/) { make $<complex-expression>.made }
 method expression:sym<at-operator>($/) {
     my Subtitle::Filter $timestamp = $<timestamp>.made;

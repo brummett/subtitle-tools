@@ -5,7 +5,7 @@ use SubtitleParser;
 
 use Test;
 
-plan 5;
+plan 6;
 
 subtest 'parse' => sub {
     my @tests = (
@@ -150,6 +150,24 @@ subtest 'composite filters' => sub {
         'Text like "4" or Name="Joe"'       => ( '2', '4' ),
         'Layer=1 or Name="Joe" or Text like "4"' => ( '1', '2', '4' ),
         '(Name="Bob" and Text like "Line") or Name="Frank"' => ('1', '4'),
+        ;
+
+    _run_tests($subs, @tests);
+}
+
+subtest 'negation' => sub {
+    my $subs = q:to/END/;
+        [Events]
+        Format: Layer, Name, Text
+        Dialogue: 1, Bob, First Line
+        Dialogue: 2, Joe, Second Line
+        Dialogue: 3, Bob, The Third Entry
+        Dialogue: 4, Frank, Line 4
+        END
+
+    my @tests =
+        'not (Name = "Bob")'    => ( '2', '4' ),
+        '! Text like "Third"'    => ( '1', '2', '4' ),
         ;
 
     _run_tests($subs, @tests);

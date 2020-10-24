@@ -27,6 +27,14 @@ class Subtitle::Filter::AttributeLookup is Subtitle::Filter {
     method gist { qq<get($!field)> }
 }
 
+class Subtitle::Filter::Operator::Not is Subtitle::Filter {
+    has Subtitle::Filter $.expr;
+    method gist { 'not ' ~ $!expr }
+    multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
+        not $!expr.evaluate($event);
+    }
+}
+
 class Subtitle::Filter::Operator::At is Subtitle::Filter {
     has Subtitle::Filter $.timestamp;
     method gist { 'at ' ~ $!timestamp }

@@ -13,6 +13,9 @@ proto rule expression { * }
 rule expression:sym<recurse>        { '(' ~ ')' <complex-expression> }
 rule expression:sym<infix-operator> { <left=expr-simple> <operator> <right=expr-simple> }
 rule expression:sym<at-operator>    { :ignorecase 'at' <timestamp=atom> }
+rule expression:sym<not>            { <not-keyword> <complex-expression> }
+
+token not-keyword { :ignorecase '!' | 'not' }
 
 proto token operator { * }
 token operator:sym<eq> { '=' }
