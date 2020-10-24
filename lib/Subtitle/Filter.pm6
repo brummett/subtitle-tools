@@ -27,13 +27,17 @@ class Subtitle::Filter::AttributeLookup is Subtitle::Filter {
     method gist { qq<get($!field)> }
 }
 
-class Subtitle::Filter::Operator::Eq is Subtitle::Filter {
+class Subtitle::Filter::Operator is Subtitle::Filter {
     has Subtitle::Filter $.left;
     has Subtitle::Filter $.right;
+    method op { ... }
+    method gist { ($!left.gist, self.op, $!right.gist).join(' ') }
+}
 
+class Subtitle::Filter::Operator::Eq is Subtitle::Filter::Operator {
+    method op { 'eq' }
     multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
-        return $!left.evaluate($event) eq $!right.evaluate($event);
+        return $.left.evaluate($event) eq $.right.evaluate($event);
     }
-    method gist { $!left.gist ~ " eq " ~ $!right.gist }
 }
 
