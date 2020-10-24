@@ -98,6 +98,22 @@ subtest 'filter on bogus field' => sub {
             'Filtering on unknown field throws exception';
 }
 
+sub _run_tests($subtitles, @tests) {
+    my $s = SubtitleParser.parse_ssa($subtitles);
+    plan @tests.elems;
+    for @tests -> (:key($test), :value($expected) ) {
+        subtest $test => sub {
+            plan 2;
+            my $f = Subtitle::Filter::Grammar.parse($test, actions => Subtitle::Filter::ConstructFilter).made;
+            ok $f, 'Parse';
+            my $filtered_subs = $f.evaluate($s);
+            is-deeply $filtered_subs.events>>.get('Layer'),
+                $expected,
+                'Returned expected events';
+        };
+    }
+}
+
 subtest 'filter by time' => sub {
     my $subs = q:to/END/;
         [Events]
@@ -106,7 +122,6 @@ subtest 'filter by time' => sub {
         Dialogue: 2, 0:01:01, 0:02:02, Second overlaps third
         Dialogue: 3, 0:01:31, 0:03:02, Third overlaps second
         END
-    my $s = SubtitleParser.parse_ssa($subs);
 
     my @tests =
         'Start < 0:01:00'   => List.new('1'),
@@ -117,18 +132,6 @@ subtest 'filter by time' => sub {
         'at 0:02:00'        => ( '2', '3' ),
         ;
 
-    plan @tests.elems;
-
-    for @tests -> (:key($test), :value($expected_lines) ) {
-        subtest $test => sub {
-            plan 2;
-
-            my $f = Subtitle::Filter::Grammar.parse($test, actions => Subtitle::Filter::ConstructFilter).made;
-            ok $f, 'Parse';
-            my $filtered_subs = $f.evaluate($s);
-            is-deeply $filtered_subs.events>>.get('Layer'),
-                $expected_lines,
-                'Returned expected events';
-        };
-    }
+    _run_tests($subs,@tests);
 }
+
