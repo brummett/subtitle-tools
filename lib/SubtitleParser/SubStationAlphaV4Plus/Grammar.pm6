@@ -44,13 +44,17 @@ token style {
         unless @*fields.elems == @<field>.elems }
 }
 
+proto token event-field-value { * }
+token event-field-value:sym<timestamp> { <hour=digit> ':' $<minute>=[\d ** 2] ':' $<second>=[\d ** 2] [ '.' $<ms>=[ \d ** 2 ] ]? }
+token event-field-value:sym<field> { <field> }
+
 token event {
     <event-type> ': '
-    <field> ** { 0 .. (@*fields.elems - 1) } % <comma-separator>
-    { fail "Expected { @*fields.elems } fields but got { @<field>.elems } at ｢$/｣"
-        unless @<field>.elems == @*fields.elems - 1 }
+    <event-field-value> ** { 0 .. (@*fields.elems - 1) } % <comma-separator>
+    { fail "Expected { @*fields.elems } fields but got { @<event-field-value>.elems } at ｢$/｣"
+        unless @<event-field-value>.elems == @*fields.elems - 1 }
     [ <comma-separator> <final-field=string-to-end-of-line> ]*
-    { fail "Expected { @*fields.elems } fields but got { @<field>.elems } at ｢$/｣"
+    { fail "Expected { @*fields.elems } fields but got { @<event-field-value>.elems } at ｢$/｣"
         unless $<comma-separator> and $<final-field> }
 }
 

@@ -3,6 +3,7 @@ unit class SubtitleParser::SubStationAlphaV4Plus::Actions;
 use Subtitle::SubStationAlphaV4Plus;
 use Subtitle::SubStationAlphaV4Plus::Section;
 use Subtitle::SubStationAlphaV4Plus::SectionLine;
+use Subtitle::Timestamp;
 
 method TOP($/) {
     my @sections = $<section>>>.made;
@@ -39,9 +40,18 @@ method style($/) {
     make Subtitle::SubStationAlphaV4Plus::Style.new(fields => @*fields, values => @<field>>>.Str);
 }
 
+method event-field-value:sym<timestamp>($/) {
+    my Int $hour    = $<hour>.Int;
+    my Int $minute  = $<minute>.Int;
+    my Int $second  = $<second>.Int;
+    my Int $ms      = defined($<ms>) ?? $<ms>.Int !! 0;
+    make Subtitle::Timestamp.new(:$hour, :$minute, :$second, :$ms);
+}
+method event-field-value:sym<field>($/) { make $/.Str }
+
 method event($/) {
     my $type = $<event-type>.Str;
-    my @fields = @<field>>>.Str;
+    my @fields = @<event-field-value>>>.made;
     make Subtitle::SubStationAlphaV4Plus::Event.new(key => $type, fields => @*fields, values => (|@fields, $<final-field>.Str))
 }
 
