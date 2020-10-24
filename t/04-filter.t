@@ -5,7 +5,7 @@ use SubtitleParser;
 
 use Test;
 
-plan 3;
+plan 4;
 
 subtest 'parse' => sub {
     my @tests = (
@@ -94,4 +94,39 @@ subtest 'filter on bogus field' => sub {
             Exception,
             message => qq<Unknown field "bogus">,
             'Filtering on unknown field throws exception';
+}
+
+subtest 'filter by time' => sub {
+    my $subs = q:to/END/;
+        [Events]
+        Format: Layer, Start, End, Text
+        Dialogue: 1, 0:00:01, 0:00:02, First
+        Dialogue: 2, 0:01:01, 0:02:02, Second overlaps third
+        Dialogue: 3, 0:01:31, 0:03:02, Third overlaps second
+        END
+    my $s = SubtitleParser.parse_ssa($subs);
+
+    my @tests =
+        'Start < 0:01:00'   => List.new('1'),
+        'Start < 0:01:30'   => ( '1', '2' ),
+        'End > 0:02:00'     => ( '2', '3' ),
+        'at 0:01:00'        => ( ),
+        'at 0:01:10'        => List.new('2'),
+        'at 0:02:00'        => ( '2', '3' ),
+        ;
+
+    plan @tests.elems;
+
+    for @tests -> (:key($test), :value($expected_lines) ) {
+        subtest $test => sub {
+            plan 2;
+
+            my $f = Subtitle::Filter::Grammar.parse($test, actions => Subtitle::Filter::ConstructFilter).made;
+            ok $f, 'Parse';
+            my $filtered_subs = $f.evaluate($s);
+            is-deeply $filtered_subs.events>>.get('Layer'),
+                $expected_lines,
+                'Returned expected events';
+        };
+    }
 }

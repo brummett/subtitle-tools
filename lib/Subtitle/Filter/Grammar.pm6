@@ -6,6 +6,7 @@ token TOP {
 
 proto rule expression { * }
 rule expression:sym<infix-operator> { <left=expr-simple> <operator> <right=expr-simple> }
+rule expression:sym<at-operator>    { :ignorecase 'at' <timestamp=atom> }
 
 proto token operator { * }
 token operator:sym<eq> { '=' }
@@ -25,6 +26,7 @@ proto rule expr-simple { * }
 rule expr-simple:sym<identifier-or-value>  { <atom> }
 
 proto token atom { * }
+token atom:sym<timestamp>  { <hour=digit> ':' $<minute>=[\d ** 2] ':' $<second>=[\d ** 2] }
 token atom:sym<identifier> { <alpha>+ }
 token atom:sym<number> { <digit>+ }
 token atom:sym<string-qq> {
