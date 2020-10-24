@@ -13,14 +13,16 @@ class Subtitle::Filter {
 
 class Subtitle::Filter::Constant is Subtitle::Filter {
     has Cool $.value;
-    multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Cool) { $.value }
+    multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Cool) { $!value }
+    method gist { qq<"$!value"> }
 }
 
 class Subtitle::Filter::AttributeLookup is Subtitle::Filter {
     has Str $.field;
     multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Cool) {
-        $event.get($.field);
+        $event.get($!field);
     }
+    method gist { qq<get($!field)> }
 }
 
 class Subtitle::Filter::Operator::Eq is Subtitle::Filter {
@@ -28,7 +30,8 @@ class Subtitle::Filter::Operator::Eq is Subtitle::Filter {
     has Subtitle::Filter $.right;
 
     multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
-        return $.left.evaluate($event) eq $.right.evaluate($event);
+        return $!left.evaluate($event) eq $!right.evaluate($event);
     }
+    method gist { $!left.gist ~ " eq " ~ $!right.gist }
 }
 
