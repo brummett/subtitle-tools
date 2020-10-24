@@ -29,7 +29,7 @@ class Subtitle::Filter::AttributeLookup is Subtitle::Filter {
 
 class Subtitle::Filter::Operator::At is Subtitle::Filter {
     has Subtitle::Filter $.timestamp;
-    method op { 'at' }
+    method gist { 'at ' ~ $!timestamp }
     multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
         $event.get('Start') <= $!timestamp.evaluate($event) <= $event.get('End');
     }
@@ -38,7 +38,7 @@ class Subtitle::Filter::Operator::At is Subtitle::Filter {
 class Subtitle::Filter::Operator::In is Subtitle::Filter {
     has Subtitle::Filter $.left;
     has Set $.right;
-    method op { 'in' }
+    method gist { 'in [' ~ $!right ~ ']' }
     multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
         $!left.evaluate($event) (elem) $!right;
     }
