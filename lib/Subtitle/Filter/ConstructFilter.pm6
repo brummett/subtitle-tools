@@ -13,6 +13,7 @@ method expression:sym<infix-operator>($/) {
     my $op_class = do given $op {
         when '='    { Subtitle::Filter::Operator::Eq }
         when '!='   { Subtitle::Filter::Operator::Ne }
+        when 'in'   { Subtitle::Filter::Operator::In }
         when 'lt'   { Subtitle::Filter::Operator::Lt }
         when '<'    { Subtitle::Filter::Operator::LtNumber }
         when 'le'   { Subtitle::Filter::Operator::Le }
@@ -34,6 +35,7 @@ method expression:sym<at-operator>($/) {
 }
 
 method expr-simple:sym<identifier-or-value>($/) { make $<atom>.made }
+method expr-simple:sym<list>($/) { make set @<atom>>>.made>>.value }
 
 method atom:sym<identifier>($/) { make Subtitle::Filter::AttributeLookup.new(field => $/.Str) }
 method atom:sym<number>($/)     { make Subtitle::Filter::Constant.new(value => $/.Str) }

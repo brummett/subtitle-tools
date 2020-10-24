@@ -35,6 +35,15 @@ class Subtitle::Filter::Operator::At is Subtitle::Filter {
     }
 }
 
+class Subtitle::Filter::Operator::In is Subtitle::Filter {
+    has Subtitle::Filter $.left;
+    has Set $.right;
+    method op { 'in' }
+    multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
+        $!left.evaluate($event) (elem) $!right;
+    }
+}
+
 class Subtitle::Filter::Operator is Subtitle::Filter {
     has Subtitle::Filter $.left;
     has Subtitle::Filter $.right;

@@ -11,6 +11,7 @@ rule expression:sym<at-operator>    { :ignorecase 'at' <timestamp=atom> }
 proto token operator { * }
 token operator:sym<eq> { '=' }
 token operator:sym<ne> { '!=' }
+token operator:sym<in> { 'in' }
 token operator:sym<lt> { 'lt'  }
 token operator:sym<gt> { 'gt'  }
 token operator:sym<le> { 'le'  }
@@ -24,6 +25,7 @@ token operator:sym<like> { :ignorecase 'like' }
 
 proto rule expr-simple { * }
 rule expr-simple:sym<identifier-or-value>  { <atom> }
+rule expr-simple:sym<list> { '[' ~ ']' [ <atom>+ % ',' ] }
 
 proto token atom { * }
 token atom:sym<timestamp>  { <hour=digit> ':' $<minute>=[\d ** 2] ':' $<second>=[\d ** 2] }

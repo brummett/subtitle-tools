@@ -52,6 +52,8 @@ subtest 'basic filter' => sub {
         'Layer le 2'    => ( '1', '2' ),
         'Layer >= 2'    => ( '2', '3' ),
         'Layer ge 2'    => ( '2', '3' ),
+        'Layer in [1,3]' => ( '1', '3' ),
+        'Name in ["Second","Fourth"]' => List.new('2'),
         ;
 
     plan 1 + @filters.elems;
