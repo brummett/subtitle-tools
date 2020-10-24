@@ -9,6 +9,16 @@ rule expression:sym<infix-operator> { <left=expr-simple> <operator> <right=expr-
 
 proto token operator { * }
 token operator:sym<eq> { '=' }
+token operator:sym<ne> { '!=' }
+token operator:sym<lt> { 'lt'  }
+token operator:sym<gt> { 'gt'  }
+token operator:sym<le> { 'le'  }
+token operator:sym<ge> { 'ge'  }
+token operator:sym<lt-number> { '<'  }
+token operator:sym<gt-number> { '>'  }
+token operator:sym<le-number> { '<='  }
+token operator:sym<ge-number> { '>='  }
+
 token operator:sym<like> { :ignorecase 'like' }
 
 proto rule expr-simple { * }

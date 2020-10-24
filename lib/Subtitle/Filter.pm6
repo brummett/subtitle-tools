@@ -41,10 +41,73 @@ class Subtitle::Filter::Operator::Eq is Subtitle::Filter::Operator {
     }
 }
 
+class Subtitle::Filter::Operator::Ne is Subtitle::Filter::Operator {
+    method op { 'ne' }
+    multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
+        return $.left.evaluate($event) ne $.right.evaluate($event);
+    }
+}
+
 class Subtitle::Filter::Operator::Like is Subtitle::Filter::Operator {
     method op { 'like' }
     multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
         my $right = $.right.evaluate($event);
         ($.left.evaluate($event) ~~ /<$right>/).Bool;
+    }
+}
+
+class Subtitle::Filter::Operator::Lt is Subtitle::Filter::Operator {
+    method op { 'lt' }
+    multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
+        return $.left.evaluate($event) lt $.right.evaluate($event);
+    }
+}
+
+class Subtitle::Filter::Operator::LtNumber is Subtitle::Filter::Operator {
+    method op { '<' }
+    multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
+        return $.left.evaluate($event) < $.right.evaluate($event);
+    }
+}
+
+class Subtitle::Filter::Operator::Le is Subtitle::Filter::Operator {
+    method op { 'le' }
+    multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
+        return $.left.evaluate($event) le $.right.evaluate($event);
+    }
+}
+
+class Subtitle::Filter::Operator::LeNumber is Subtitle::Filter::Operator {
+    method op { '<=' }
+    multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
+        return $.left.evaluate($event) <= $.right.evaluate($event);
+    }
+}
+
+class Subtitle::Filter::Operator::Gt is Subtitle::Filter::Operator {
+    method op { 'gt' }
+    multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
+        return $.left.evaluate($event) gt $.right.evaluate($event);
+    }
+}
+
+class Subtitle::Filter::Operator::GtNumber is Subtitle::Filter::Operator {
+    method op { '>' }
+    multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
+        return $.left.evaluate($event) > $.right.evaluate($event);
+    }
+}
+
+class Subtitle::Filter::Operator::Ge is Subtitle::Filter::Operator {
+    method op { 'ge' }
+    multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
+        return $.left.evaluate($event) ge $.right.evaluate($event);
+    }
+}
+
+class Subtitle::Filter::Operator::GeNumber is Subtitle::Filter::Operator {
+    method op { '>=' }
+    multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
+        return $.left.evaluate($event) >= $.right.evaluate($event);
     }
 }

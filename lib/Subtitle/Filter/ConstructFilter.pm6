@@ -11,6 +11,15 @@ method expression:sym<infix-operator>($/) {
 
     my $op_class = do given $op {
         when '='    { Subtitle::Filter::Operator::Eq }
+        when '!='   { Subtitle::Filter::Operator::Ne }
+        when 'lt'   { Subtitle::Filter::Operator::Lt }
+        when '<'    { Subtitle::Filter::Operator::LtNumber }
+        when 'le'   { Subtitle::Filter::Operator::Le }
+        when '<='   { Subtitle::Filter::Operator::LeNumber }
+        when 'gt'   { Subtitle::Filter::Operator::Gt }
+        when '>'    { Subtitle::Filter::Operator::GtNumber }
+        when 'ge'   { Subtitle::Filter::Operator::Ge }
+        when '>='   { Subtitle::Filter::Operator::GeNumber }
         when 'like' { Subtitle::Filter::Operator::Like }
         default { fail "Unknown operator $op" }
     };

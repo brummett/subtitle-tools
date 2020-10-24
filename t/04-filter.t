@@ -38,20 +38,28 @@ subtest 'basic filter' => sub {
         END
 
     # Filters, and which "Layer" lines match
-    my %filters =
+    my @filters =
         '1=1'               => ( '1', '2', '3'),
         'Layer=2'           => List.new( '2' ),
         'Name="bogus"'      => ( ),
         'Text != "Line 2"'  => ( '1', '3' ),
         'Text like "Line"'  => ( '1', '2' ),
+        'Layer<3'       => ( '1', '2' ),
+        'Layer lt 3'    => ( '1', '2' ),
+        'Layer > 1'     => ( '2', '3' ),
+        'Layer gt 1'    => ( '2', '3' ),
+        'Layer<=2'      => ( '1', '2' ),
+        'Layer le 2'    => ( '1', '2' ),
+        'Layer >= 2'    => ( '2', '3' ),
+        'Layer ge 2'    => ( '2', '3' ),
         ;
 
-    plan 1 + %filters.elems;
+    plan 1 + @filters.elems;
 
     my $s = SubtitleParser.parse_ssa($subs);
     ok($s, 'Parsed subtitles');
 
-    for %filters.kv -> $filter, $expected_lines {
+    for @filters -> (:key($filter), :value($expected_lines)) {
         subtest $filter => sub {
             plan 3;
 
