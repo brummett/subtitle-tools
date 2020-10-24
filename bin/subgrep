@@ -1,0 +1,38 @@
+#!/usr/local/bin/perl6
+
+use SubtitleParser;
+use Subtitle::Filter;
+use Subtitle::Filter::Grammar;
+use Subtitle::Filter::ConstructFilter;
+
+multi sub MAIN(Str $filter-str, Str $input-file where *.IO.f) {
+    my $fh = try { $input-file.IO.open };
+    unless $fh {
+        note $!;
+        exit 1;
+    }
+    LEAVE $fh.close;
+    do_grep(:$fh, :$filter-str);
+}
+
+multi sub MAIN(Str $filter-str) {
+    do_grep(fh => $*IN, :$filter-str);
+}
+
+sub do_grep(IO::Handle :$fh, Str :$filter-str) {
+    my $filter = Subtitle::Filter::Grammar.parse($filter-str, actions => Subtitle::Filter::ConstructFilter).made;
+    unless $filter {
+        note "Couldn't parse filter";
+        exit 1;
+    }
+
+    my $subs = SubtitleParser.parse_ssa($fh.slurp);
+    unless $subs {
+        note "Couldn't parse subtitles";
+        exit 1;
+    }
+
+    my $filtered-subs = $filter.evaluate($subs);
+    say "$filtered-subs";
+}
+
