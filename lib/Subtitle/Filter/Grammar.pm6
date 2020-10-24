@@ -14,13 +14,13 @@ rule expression:sym<recurse>        { '(' ~ ')' <complex-expression> }
 rule expression:sym<infix-operator> { <left=expr-simple> <operator> <right=expr-simple> }
 rule expression:sym<at-operator>    { :ignorecase 'at' <timestamp=atom> }
 rule expression:sym<not>            { <not-keyword> <complex-expression> }
+rule expression:sym<in>             { :ignorecase <left=expr-simple> 'in' <in-list> }
 
 token not-keyword { :ignorecase '!' | 'not' }
 
 proto token operator { * }
 token operator:sym<eq> { '=' }
 token operator:sym<ne> { '!=' }
-token operator:sym<in> { 'in' }
 token operator:sym<lt> { 'lt'  }
 token operator:sym<gt> { 'gt'  }
 token operator:sym<le> { 'le'  }
@@ -34,7 +34,8 @@ token operator:sym<like> { :ignorecase 'like' }
 
 proto rule expr-simple { * }
 rule expr-simple:sym<identifier-or-value>  { <atom> }
-rule expr-simple:sym<list> { '[' ~ ']' [ <atom>+ % ',' ] }
+
+rule in-list { '[' ~ ']' [ <atom>+ % ',' ] }
 
 proto token atom { * }
 token atom:sym<timestamp>  { <hour=digit> ':' $<minute>=[\d ** 2] ':' $<second>=[\d ** 2] }

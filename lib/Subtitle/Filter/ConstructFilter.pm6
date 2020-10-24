@@ -34,6 +34,7 @@ method expression:sym<infix-operator>($/) {
 }
 
 method expression:sym<not>($/) { make Subtitle::Filter::Operator::Not.new(expr => $<complex-expression>.made) }
+method expression:sym<in>($/)  { make Subtitle::Filter::Operator::In.new(left => $<left>.made, right => $<in-list>.made) }
 method expression:sym<recurse>($/) { make $<complex-expression>.made }
 method expression:sym<at-operator>($/) {
     my Subtitle::Filter $timestamp = $<timestamp>.made;
@@ -41,7 +42,8 @@ method expression:sym<at-operator>($/) {
 }
 
 method expr-simple:sym<identifier-or-value>($/) { make $<atom>.made }
-method expr-simple:sym<list>($/) { make set @<atom>>>.made>>.value }
+
+method in-list($/) { make set @<atom>>>.made>>.value }
 
 method atom:sym<identifier>($/) { make Subtitle::Filter::AttributeLookup.new(field => $/.Str) }
 method atom:sym<number>($/)     { make Subtitle::Filter::Constant.new(value => $/.Str) }
