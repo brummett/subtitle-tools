@@ -128,3 +128,17 @@ class Subtitle::Filter::Operator::GeNumber is Subtitle::Filter::Operator {
         return $.left.evaluate($event) >= $.right.evaluate($event);
     }
 }
+
+class Subtitle::Filter::Operator::And is Subtitle::Filter::Operator {
+    method op { 'and' }
+    multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
+        return $.left.evaluate($event) && $.right.evaluate($event);
+    }
+}
+
+class Subtitle::Filter::Operator::Or is Subtitle::Filter::Operator {
+    method op { 'or' }
+    multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
+        return $.left.evaluate($event) || $.right.evaluate($event);
+    }
+}

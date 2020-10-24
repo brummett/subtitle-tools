@@ -3,7 +3,11 @@ unit class Subtitle::Filter::ConstructFilter;
 use Subtitle::Filter;
 use Subtitle::Timestamp;
 
-method TOP($/) { make $<expression>.made }
+method TOP($/) { make $<complex-expression>.made }
+
+method complex-expression:sym<and>($/) { make Subtitle::Filter::Operator::And.new(left => $<left>.made, right => $<right>.made) }
+method complex-expression:sym<or>($/)  { make Subtitle::Filter::Operator::Or.new( left => $<left>.made, right => $<right>.made) }
+method complex-expression:sym<simple>($/)  { make $<expression>.made }
 
 method expression:sym<infix-operator>($/) {
     my $left  = $<left>.made;
@@ -29,6 +33,7 @@ method expression:sym<infix-operator>($/) {
     make $op_class.new(:$left, :$right);
 }
 
+method expression:sym<recurse>($/) { make $<complex-expression>.made }
 method expression:sym<at-operator>($/) {
     my Subtitle::Filter $timestamp = $<timestamp>.made;
     make Subtitle::Filter::Operator::At.new(:$timestamp);

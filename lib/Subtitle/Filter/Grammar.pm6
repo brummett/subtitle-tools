@@ -1,10 +1,16 @@
 unit grammar Subtitle::Filter::Grammar;
 
 token TOP {
-    <expression>
+    <complex-expression>
 }
 
+proto rule complex-expression { * }
+rule complex-expression:sym<and>     { :ignorecase <left=expression> 'and' <right=complex-expression> }
+rule complex-expression:sym<or>      { :ignorecase <left=expression> 'or' <right=complex-expression> }
+rule complex-expression:sym<simple>  { <expression> }
+
 proto rule expression { * }
+rule expression:sym<recurse>        { '(' ~ ')' <complex-expression> }
 rule expression:sym<infix-operator> { <left=expr-simple> <operator> <right=expr-simple> }
 rule expression:sym<at-operator>    { :ignorecase 'at' <timestamp=atom> }
 
