@@ -5,7 +5,7 @@ use SubtitleParser;
 
 use Test;
 
-plan 2;
+plan 3;
 
 subtest 'parse' => sub {
     my @tests = (
@@ -63,4 +63,25 @@ subtest 'basic filter' => sub {
                 'Returned expected events';
         };
     }
+}
+
+subtest 'filter on bogus field' => sub {
+    plan 3;
+    my $subs = q:to/END/;
+        [Events]
+        Format: Layer, Name, Text
+        Dialogue: 1, First, Line 1
+        Dialogue: 2, Second, Line 2
+        Dialogue: 3, Third, Entry number three
+        END
+    my $s = SubtitleParser.parse_ssa($subs);
+    ok $s, 'Parse subtitles';
+
+    my $filter = Subtitle::Filter::Grammar.parse('bogus="foo"', actions => Subtitle::Filter::ConstructFilter).made;
+    ok $filter, 'Create filter';
+
+    throws-like { $filter.evaluate($s) },
+            Exception,
+            message => qq<Unknown field "bogus">,
+            'Filtering on unknown field throws exception';
 }

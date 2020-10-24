@@ -20,7 +20,9 @@ class Subtitle::Filter::Constant is Subtitle::Filter {
 class Subtitle::Filter::AttributeLookup is Subtitle::Filter {
     has Str $.field;
     multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Cool) {
-        $event.get($!field);
+        my $value = $event.get($!field);
+        die qq<Unknown field "$!field"> unless defined($value);
+        $value;
     }
     method gist { qq<get($!field)> }
 }
