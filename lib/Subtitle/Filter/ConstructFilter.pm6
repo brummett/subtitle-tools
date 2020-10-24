@@ -10,7 +10,7 @@ method expression:sym<infix-operator>($/) {
     my $op    = $<operator>.Str;
 
     my $op_class = do given $op {
-        when '=' { Subtitle::Filter::Operator::Eq }
+        when '='    { Subtitle::Filter::Operator::Eq }
         when 'like' { Subtitle::Filter::Operator::Like }
         default { fail "Unknown operator $op" }
     };
