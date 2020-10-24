@@ -15,7 +15,7 @@ class Subtitle::SubStationAlphaV4Plus::Comment
 class Subtitle::SubStationAlphaV4Plus::Multivalue
     is Subtitle::SubStationAlphaV4Plus::KeyValue
 {
-    has Str @.values;
+    has Cool @.values;
     method value { @!values.join(', ') }
     method Str { "$.key: { self.value }\n" }
 }
@@ -37,7 +37,7 @@ class Subtitle::SubStationAlphaV4Plus::HashValue
         }
     }
 
-    method get(Str $field --> Str) {
+    method get(Str $field --> Cool) {
         my $idx = %!fields{$field};
         defined($idx) ?? @.values[ %!fields{$field} ] !! Nil;
     }
