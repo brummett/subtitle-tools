@@ -53,7 +53,8 @@ method atom:sym<timestamp>($/)  {
     my $hour    = $<hour>.Int;
     my $minute  = $<minute>.Int;
     my $second  = $<second>.Int;
-    my $timestamp = Subtitle::Timestamp.new(:$hour, :$minute, :$second);
+    my $ms      = defined($<ms>) ?? $<ms>.Int !! 0;
+    my $timestamp = Subtitle::Timestamp.new(:$hour, :$minute, :$second, :$ms);
     make Subtitle::Filter::Constant.new(value => $timestamp);
 }
 

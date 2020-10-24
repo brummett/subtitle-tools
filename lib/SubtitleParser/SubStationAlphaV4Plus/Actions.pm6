@@ -44,7 +44,8 @@ method event-field-value:sym<timestamp>($/) {
     my Int $hour    = $<hour>.Int;
     my Int $minute  = $<minute>.Int;
     my Int $second  = $<second>.Int;
-    make Subtitle::Timestamp.new(:$hour, :$minute, :$second);
+    my Int $ms      = defined($<ms>) ?? $<ms>.Int !! 0;
+    make Subtitle::Timestamp.new(:$hour, :$minute, :$second, :$ms);
 }
 method event-field-value:sym<field>($/) { make $/.Str }
 

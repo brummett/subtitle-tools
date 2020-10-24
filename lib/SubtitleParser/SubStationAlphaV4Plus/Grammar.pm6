@@ -45,7 +45,7 @@ token style {
 }
 
 proto token event-field-value { * }
-token event-field-value:sym<timestamp> { <hour=digit> ':' $<minute>=[\d ** 2] ':' $<second>=[\d ** 2] }
+token event-field-value:sym<timestamp> { <hour=digit> ':' $<minute>=[\d ** 2] ':' $<second>=[\d ** 2] [ '.' $<ms>=[ \d ** 2 ] ]? }
 token event-field-value:sym<field> { <field> }
 
 token event {

@@ -118,7 +118,7 @@ subtest 'filter by time' => sub {
     my $subs = q:to/END/;
         [Events]
         Format: Layer, Start, End, Text
-        Dialogue: 1, 0:00:01, 0:00:02, First
+        Dialogue: 1, 0:00:01.12, 0:00:02.43, First
         Dialogue: 2, 0:01:01, 0:02:02, Second overlaps third
         Dialogue: 3, 0:01:31, 0:03:02, Third overlaps second
         END

@@ -38,7 +38,7 @@ rule expr-simple:sym<identifier-or-value>  { <atom> }
 rule in-list { '[' ~ ']' [ <atom>+ % ',' ] }
 
 proto token atom { * }
-token atom:sym<timestamp>  { <hour=digit> ':' $<minute>=[\d ** 2] ':' $<second>=[\d ** 2] }
+token atom:sym<timestamp>  { <hour=digit> ':' $<minute>=[\d ** 2] ':' $<second>=[\d ** 2] [ '.' $<ms>=[ \d ** 2 ] ]? }
 token atom:sym<identifier> { <alpha>+ }
 token atom:sym<number> { <digit>+ }
 token atom:sym<string-qq> {
