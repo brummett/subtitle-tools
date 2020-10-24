@@ -42,6 +42,7 @@ subtest 'basic filter' => sub {
         '1=1'           => ( '1', '2', '3'),
         'Layer=2'       => List.new( '2' ),
         'Name="bogus"'    => ( ),
+        'Text like "Line"' => ( '1', '2' ),
         ;
 
     plan 1 + %filters.elems;

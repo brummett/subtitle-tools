@@ -41,3 +41,10 @@ class Subtitle::Filter::Operator::Eq is Subtitle::Filter::Operator {
     }
 }
 
+class Subtitle::Filter::Operator::Like is Subtitle::Filter::Operator {
+    method op { 'like' }
+    multi method evaluate(Subtitle::SubStationAlphaV4Plus::Event $event --> Bool) {
+        my $right = $.right.evaluate($event);
+        ($.left.evaluate($event) ~~ /<$right>/).Bool;
+    }
+}

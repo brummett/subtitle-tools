@@ -9,6 +9,7 @@ rule expression:sym<infix-operator> { <left=expr-simple> <operator> <right=expr-
 
 proto token operator { * }
 token operator:sym<eq> { '=' }
+token operator:sym<like> { :ignorecase 'like' }
 
 proto rule expr-simple { * }
 rule expr-simple:sym<identifier-or-value>  { <atom> }
