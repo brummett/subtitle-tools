@@ -16,7 +16,7 @@ class Subtitle::SubStationAlphaV4Plus::Multivalue
     is Subtitle::SubStationAlphaV4Plus::KeyValue
 {
     has Cool @.values;
-    method value { @!values.join(', ') }
+    method value { @!values.join(',') }
     method Str { "$.key: { self.value }\n" }
 }
 
