@@ -33,9 +33,9 @@ subtest 'Format' => sub {
 
     my $format = Subtitle::SubStationAlphaV4Plus::Format.new(values => [ 'one', 'two', 'three' ]);
     ok $format, 'create';
-    is $format.Str, "Format: one, two, three\n", 'stringify';
+    is $format.Str, "Format: one,two,three\n", 'stringify';
     is $format.values, ['one', 'two', 'three'], 'values';
-    is $format.value, 'one, two, three', 'value';
+    is $format.value, 'one,two,three', 'value';
 }
 
 subtest 'Style' => sub {
@@ -45,9 +45,9 @@ subtest 'Style' => sub {
                     fields => ['first', 'second', 'third'],
                     values => [ 'one', 'two', 'three' ]);
     ok $style, 'create';
-    is $style.Str, "Style: one, two, three\n", 'stringify';
+    is $style.Str, "Style: one,two,three\n", 'stringify';
     is $style.values, ['one', 'two', 'three'], 'values';
-    is $style.value, 'one, two, three', 'value';
+    is $style.value, 'one,two,three', 'value';
     is $style.fields, ['first', 'second', 'third'], 'fields';
     is $style.get('first'), 'one', 'get first field';
     is $style.get('second'), 'two', 'get second field';

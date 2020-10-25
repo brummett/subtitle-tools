@@ -7,10 +7,10 @@ my $subs = q:to/END/;
     Title: foo
 
     [Events]
-    Format: Layer, Name, Text
-    Comment: 0, Bob, Hello there
-    Dialogue: 10, Joe, Nice to meet you, too
-    Dialogue: 10, , {\i1}Still{\i0}, there is more\Nto see
+    Format: Layer,Name,Text
+    Comment: 0,Bob,Hello there
+    Dialogue: 10,Joe,Nice to meet you, too
+    Dialogue: 10,,{\i1}Still{\i0}, there is more\Nto see
     END
 
 my $subtitles = SubtitleParser.parse_ssa($subs);
