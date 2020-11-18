@@ -76,7 +76,7 @@ token section-line:sym<key-value> {
 token comment-token { [ ';' | '!:' ] }
 
 token key { <-[:\n]>+ }
-token string-to-end-of-line { \V+ }
+token string-to-end-of-line { \V* }
 
 token field { <-[,\n]>* }
 
