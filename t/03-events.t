@@ -2,7 +2,7 @@ use SubtitleParser;
 
 use Test;
 
-plan 1;
+plan 2;
 
 subtest 'Basic' => sub {
     my $subs = q:to/END/;
@@ -57,3 +57,28 @@ subtest 'Basic' => sub {
 
     done-testing;
 };
+
+subtest 'Extra section at end' => sub {
+    plan 5;
+
+    my $subs = q:to/END/;
+        [Script Info]
+        Title: foo
+
+        [Events]
+        Format: Layer,Name,Text
+        Dialogue: 10,Joe,Nice to meet you, too
+        Dialogue: 10,Foo,
+
+        [Data Section]
+        Data: Hi there
+        END
+
+    my $subtitles = SubtitleParser.parse_ssa($subs);
+    ok $subtitles, 'Parsed';
+
+    is $subtitles.sections.elems, 3, 'Number of sections';
+    is $subtitles.sections[0].name, 'Script Info',  'Section 0 name';
+    is $subtitles.sections[1].name, 'Events',       'Section 1 name';
+    is $subtitles.sections[2].name, 'Data Section', 'Section 2 name';
+}

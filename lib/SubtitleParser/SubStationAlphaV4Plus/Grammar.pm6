@@ -67,10 +67,10 @@ token section-name { <-[\]]>+ }
 
 proto token section-line { * }
 token section-line:sym<comment> {
-    <comment-token> \s* <value=string-to-end-of-line>
+    <comment-token> \h* <value=string-to-end-of-line>
 }
 token section-line:sym<key-value> {
-    <key> \s* ':' \s* <value=string-to-end-of-line>
+    <key> \h* ':' \h* <value=string-to-end-of-line>
 }
 
 token comment-token { [ ';' | '!:' ] }
@@ -80,4 +80,4 @@ token string-to-end-of-line { \V* }
 
 token field { <-[,\n]>* }
 
-token comma-separator { \s* ',' \s* }
+token comma-separator { \h* ',' \h* }
