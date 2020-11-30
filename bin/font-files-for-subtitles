@@ -17,8 +17,12 @@ sub MAIN(Str $subtitle-file where *.IO.f, Str $font-path where *.IO.d) {
     }
 
     my @missing;
+    my %seen;
     for $subs.styles -> $s {
         my $fontname = $s.get('Fontname');
+        next if %seen{$fontname}:exists;
+
+        %seen{$fontname} = True;
         my $filename = get-filename-for-font($fontname, $font-path);
         if $filename {
             say $filename;
