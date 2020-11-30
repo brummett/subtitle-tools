@@ -31,8 +31,10 @@ sub MAIN(Str $subtitle-file where *.IO.f, Str $font-path where *.IO.d) {
         }
     }
 
-    say "Missing fonts:";
-    .say for @missing;
+    if @missing.elems {
+        say "Missing fonts:";
+        .say for @missing;
+    }
 }
 
 sub get-filename-for-font(Str $font-name, Str $font-path --> Str) {
