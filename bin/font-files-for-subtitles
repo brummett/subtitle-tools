@@ -34,7 +34,12 @@ sub populate-filename-for-font(Str $font-path) {
     for $font-path.IO.dir -> $filename {
         my $fc-scan = run 'fc-scan', '--format', "%\{postscriptname\}\n", $filename, :out;
         my $fontnames = $fc-scan.out.slurp(:close).chomp;
-        next unless $fontname.chars;
+        next unless $fontnames.chars;
+
+        # Some font files have multiple fonts
+        for $fontnames.split(/\v/) -> $fontname {
+            %filename-for-font{$fontname} = $filename;
+        }
     }
     return %filename-for-font;
 }
