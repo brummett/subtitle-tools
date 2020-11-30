@@ -26,7 +26,17 @@ sub get-filename-for-font(Str $font-name, Str $font-path --> Str) {
     state %filename-for-font = populate-filename-for-font($font-path);
     state @all-font-names = %filename-for-font.keys;
 
-    return %filename-for-font{$font-name};
+    %filename-for-font{$font-name}:exists and return %filename-for-font{$font-name};
+
+    # Maybe there's a similarly named font...
+    my @matching = @all-font-names.grep: { .match(/^ "$font-name" <|w>/) }
+    if @matching.elems == 0 {
+        fail "No font found for $font-name";
+    } elsif @matching.elems > 1 {
+        fail "Multiple fonts found for $font-name: " ~ @matching.join(', ');
+    } else {
+        return %filename-for-font{ @matching[0] };
+    }
 }
 
 sub populate-filename-for-font(Str $font-path) {
