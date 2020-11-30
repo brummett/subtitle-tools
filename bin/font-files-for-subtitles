@@ -1,0 +1,41 @@
+#!/usr/local/bin/perl6
+
+use SubtitleParser;
+
+sub MAIN(Str $subtitle-file where *.IO.f, Str $font-path where *.IO.d) {
+    my $fh = try { $subtitle-file.IO.open };
+    unless $fh {
+        note $!;
+        exit 1;
+    }
+    LEAVE $fh.close;
+
+    my $subs = SubtitleParser.parse_ssa($fh.slurp);
+    unless $subs {
+        note "Couldn't parse subtitles";
+        exit 1;
+    }
+
+    for $subs.styles -> $s {
+        my $filename = get-filename-for-font($s.get('Fontname'), $font-path);
+        say $filename;
+    }
+}
+
+sub get-filename-for-font(Str $font-name, Str $font-path --> Str) {
+    state %filename-for-font = populate-filename-for-font($font-path);
+    state @all-font-names = %filename-for-font.keys;
+
+    return %filename-for-font{$font-name};
+}
+
+sub populate-filename-for-font(Str $font-path) {
+    my %filename-for-font;
+    for $font-path.IO.dir -> $filename {
+        my $fc-scan = run 'fc-scan', '--format', "%\{postscriptname\}\n", $filename, :out;
+        my $fontnames = $fc-scan.out.slurp(:close).chomp;
+        next unless $fontname.chars;
+    }
+    return %filename-for-font;
+}
+
