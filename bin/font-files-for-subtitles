@@ -41,7 +41,7 @@ sub get-filename-for-font(Str $font-name, Str $font-path --> Str) {
     state %filename-for-font = populate-filename-for-font($font-path);
     state @all-font-names = %filename-for-font.keys;
 
-    %filename-for-font{$font-name}:exists and return %filename-for-font{$font-name};
+    %filename-for-font{$font-name.lc}:exists and return %filename-for-font{$font-name.lc};
 
     fail "No font found for $font-name";
 
@@ -62,7 +62,7 @@ sub populate-filename-for-font(Str $font-path) {
     my %filename-for-font;
     for $font-path.IO.dir -> $filename {
         for font-names-for-filename($filename) -> $fontname {
-            %filename-for-font{$fontname} = $filename.Str;
+            %filename-for-font{$fontname.lc} = $filename.Str;
         }
     }
     return %filename-for-font;
