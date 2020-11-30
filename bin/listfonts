@@ -1,0 +1,27 @@
+#!/usr/local/bin/perl6
+
+use SubtitleParser;
+
+sub MAIN(Str $input-file where *.IO.f) {
+    my $fh = try { $input-file.IO.open };
+    unless $fh {
+        note $!;
+        exit 1;
+    }
+    LEAVE $fh.close;
+
+    my $subs = SubtitleParser.parse_ssa($fh.slurp);
+    unless $subs {
+        note "Couldn't parse subtitles";
+        exit 1;
+    }
+
+    my %seen;
+    for $subs.styles -> $s {
+        my $font = $s.get('Fontname');
+        say $font unless %seen{$font};
+        %seen{$font} = 1;
+    }
+}
+
+
