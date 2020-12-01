@@ -70,7 +70,12 @@ sub populate-filename-for-font(Str $font-path) {
 
 sub font-names-for-filename(Cool $font-filename --> List) {
     my $fc-scan = run 'fc-scan', '--format', "%\{postscriptname\}\n%\{family\}", $font-filename, :out;
-    my Str @fontnames = $fc-scan.out.slurp(:close).lines;
+    my Str @fontnames;
+    for $fc-scan.out.slurp(:close).lines -> $line {
+        for $line.split(',') -> $name {
+            @fontnames.push($name);
+        }
+    }
     return @fontnames.List;
 }
 
