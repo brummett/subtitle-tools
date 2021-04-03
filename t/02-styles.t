@@ -9,7 +9,7 @@ my $subs = q:to/END/;
     Title: foo
 
     [V4+ Styles]
-    Format: Name,Fontname,Fontsize,PrimaryColour,Bold,Angle
+    Format: Name, Fontname, Fontsize, PrimaryColour, Bold, Angle
     Style: BoldStyle,BoldFont,100,BoldColor,1,90
     Style: Default,DefaultFont,10,DefaultColor,0,180
     END

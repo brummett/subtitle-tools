@@ -24,6 +24,7 @@ class Subtitle::SubStationAlphaV4Plus::Format
     is Subtitle::SubStationAlphaV4Plus::Multivalue
 {
     has $.key = 'Format';
+    method value { @.values.join(', ') }
 }
 
 class Subtitle::SubStationAlphaV4Plus::HashValue
