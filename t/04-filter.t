@@ -103,10 +103,14 @@ sub _run_tests($subtitles, @tests) {
     plan @tests.elems;
     for @tests -> (:key($test), :value($expected) ) {
         subtest $test => sub {
-            plan 2;
+            plan 3;
             my $f = Subtitle::Filter::Grammar.parse($test, actions => Subtitle::Filter::ConstructFilter).made;
             ok $f, 'Parse';
             my $filtered_subs = $f.evaluate($s);
+
+            isa-ok $filtered_subs.section('Events').lines[0],
+                    Subtitle::SubStationAlphaV4Plus::Format,
+                    'First Event line is the Format';
             is-deeply $filtered_subs.events>>.get('Layer'),
                 $expected,
                 'Returned expected events';

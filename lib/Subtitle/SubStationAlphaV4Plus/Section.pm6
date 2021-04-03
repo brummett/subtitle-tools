@@ -6,3 +6,7 @@ has Str $.name;
 has Subtitle::SubStationAlphaV4Plus::KeyValue @.lines;
 
 method Str { "[$.name]\n" ~ @.lines.join() }
+
+method format {
+    @!lines.grep({ $_ ~~ Subtitle::SubStationAlphaV4Plus::Format})
+}
