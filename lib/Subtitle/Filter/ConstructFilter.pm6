@@ -16,6 +16,7 @@ method expression:sym<infix-operator>($/) {
 
     my $op_class = do given $op {
         when '='    { Subtitle::Filter::Operator::Eq }
+        when '=='   { Subtitle::Filter::Operator::Eq }
         when '!='   { Subtitle::Filter::Operator::Ne }
         when 'in'   { Subtitle::Filter::Operator::In }
         when 'lt'   { Subtitle::Filter::Operator::Lt }

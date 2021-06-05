@@ -19,7 +19,7 @@ rule expression:sym<in>             { :ignorecase <left=expr-simple> 'in' <in-li
 token not-keyword { :ignorecase '!' | 'not' }
 
 proto token operator { * }
-token operator:sym<eq> { '=' }
+token operator:sym<eq> { '==' | '=' }
 token operator:sym<ne> { '!=' }
 token operator:sym<lt> { 'lt'  }
 token operator:sym<gt> { 'gt'  }

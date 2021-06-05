@@ -40,7 +40,7 @@ subtest 'basic filter' => sub {
     # Filters, and which "Layer" lines match
     my @filters =
         '1=1'               => ( '1', '2', '3'),
-        'Layer=2'           => List.new( '2' ),
+        'Layer==2'           => List.new( '2' ),
         'Name="bogus"'      => ( ),
         'Text != "Line 2"'  => ( '1', '3' ),
         'Text like "Line"'  => ( '1', '2' ),
