@@ -5,7 +5,7 @@ use SubtitleParser;
 
 use Test;
 
-plan 6;
+plan 7;
 
 subtest 'parse' => sub {
     my @tests = (
@@ -172,6 +172,25 @@ subtest 'negation' => sub {
     my @tests =
         'not (Name = "Bob")'    => ( '2', '4' ),
         '! Text like "Third"'    => ( '1', '2', '4' ),
+        ;
+
+    _run_tests($subs, @tests);
+}
+
+subtest 'odd-characters' => sub {
+    my $subs = q:to/END/;
+        [Events]
+        Format: Layer, Style, Text
+        Dialogue: 1, In-Line Notes,Note line 1
+        Dialogue: 2, With (parens),Parens line 1
+        Dialogue: 3, Default, A default line
+        Dialogue: 4, With (parens),Parens line 2
+        Dialogue: 5, In-Line Notes,Note line 2
+        END
+
+    my @tests =
+        'Style = "In-Line Notes"' => ( '1', '5' ),
+        'Style = "With (parens)"' => ( '2', '4' ),
         ;
 
     _run_tests($subs, @tests);
