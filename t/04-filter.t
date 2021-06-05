@@ -105,7 +105,7 @@ sub _run_tests($subtitles, @tests) {
         subtest $test => sub {
             plan 3;
             my $f = Subtitle::Filter::Grammar.parse($test, actions => Subtitle::Filter::ConstructFilter).made;
-            ok $f, 'Parse';
+            ok $f, "Parse: $test";
             my $filtered_subs = $f.evaluate($s);
 
             isa-ok $filtered_subs.section('Events').lines[0],
