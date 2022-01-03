@@ -29,7 +29,7 @@ token section:sym<generic> {
     '[' <section-name> ']' \n
     { fail "Duplicate section: $<section-name>" if %*section-names{$<section-name>}:exists }
     { %*section-names{$<section-name>} = True }
-    <section-line>+ % \n+
+    <section-line>* % \n+
 }
 
 token format {
