@@ -1,0 +1,15 @@
+#!/usr/local/bin/perl6
+
+use lib $*PROGRAM.parent.add('../lib');
+use SubtitleParser;
+
+sub MAIN(*@filenames) {
+    my @styles = @filenames.map: -> $filename { extract-styles-from($filename) };
+    @styles.unique>>.say;
+}
+
+sub extract-styles-from(Str $filename) {
+    my $subs = SubtitleParser.parse_ssa($filename.IO.slurp);
+    my @style-names = $subs.styles.map: -> $style { $style.get('Name') };
+    return @style-names.Slip;
+}
