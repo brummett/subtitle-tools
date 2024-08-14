@@ -1,4 +1,6 @@
-#!/usr/local/bin/perl6
+#!/usr/bin/raku
+
+use lib $*PROGRAM.parent.add('../lib');
 
 use SubtitleParser;
 
