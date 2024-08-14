@@ -24,6 +24,17 @@ sub MAIN(Str $input-file where *.IO.f) {
         say $font unless %seen{$font};
         %seen{$font} = 1;
     }
+
+    for $subs.events -> $e {
+        my $txt = $e.get('Text');
+
+        # A cheap regex instead of a real parser for all the formatting :(
+        if $txt ~~ m/'\\fn' (\w+)/ {
+            my $font = $0;
+            say "$font" unless %seen{"$font"};
+            %seen{"$font"} = 1;
+        }
+    }
 }
 
 
