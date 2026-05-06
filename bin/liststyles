@@ -9,7 +9,11 @@ sub MAIN(*@filenames) {
 }
 
 sub extract-styles-from(Str $filename) {
-    my $subs = SubtitleParser.parse_ssa($filename.IO.slurp);
-    my @style-names = $subs.styles.map: -> $style { $style.get('Name') };
-    return @style-names.Slip;
+    with $filename.IO.slurp() -> $subtitle-content {
+        my $subs = SubtitleParser.parse_ssa($subtitle-content);
+        my @style-names = $subs.styles.map: -> $style { $style.get('Name') };
+        return @style-names.Slip;
+    } else {
+        die "Cannot parse subtitles from $filename: { .exception.message }";
+    }
 }
